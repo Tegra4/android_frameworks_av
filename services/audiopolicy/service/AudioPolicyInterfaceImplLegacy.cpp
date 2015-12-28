@@ -360,6 +360,17 @@ status_t AudioPolicyService::initStreamVolume(audio_stream_type_t stream,
     return NO_ERROR;
 }
 
+status_t AudioPolicyService::setMuteLedOn(bool on)
+{
+    if (mpAudioPolicy == NULL) {
+        return NO_INIT;
+    }
+    Mutex::Autolock _l(mLock);
+    mpAudioPolicy->set_mute_led_on(mpAudioPolicy, on);
+    return NO_ERROR;
+
+}
+
 status_t AudioPolicyService::setStreamVolumeIndex(audio_stream_type_t stream,
                                                   int index,
                                                   audio_devices_t device)
