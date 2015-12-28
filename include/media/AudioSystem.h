@@ -259,6 +259,7 @@ public:
     static status_t initStreamVolume(audio_stream_type_t stream,
                                       int indexMin,
                                       int indexMax);
+    static status_t setMuteLedOn(bool on);
     static status_t setStreamVolumeIndex(audio_stream_type_t stream,
                                          int index,
                                          audio_devices_t device);
