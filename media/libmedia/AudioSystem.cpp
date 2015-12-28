@@ -865,6 +865,13 @@ status_t AudioSystem::initStreamVolume(audio_stream_type_t stream,
     return aps->initStreamVolume(stream, indexMin, indexMax);
 }
 
+status_t AudioSystem::setMuteLedOn(bool on)
+{
+    const sp<IAudioPolicyService>& aps = AudioSystem::get_audio_policy_service();
+    if (aps == 0) return PERMISSION_DENIED;
+    return aps->setMuteLedOn(on);
+}
+
 status_t AudioSystem::setStreamVolumeIndex(audio_stream_type_t stream,
                                            int index,
                                            audio_devices_t device)

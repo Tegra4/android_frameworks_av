@@ -46,6 +46,7 @@ enum {
     STOP_INPUT,
     RELEASE_INPUT,
     INIT_STREAM_VOLUME,
+    SET_MUTE_LED_ON,
     SET_STREAM_VOLUME,
     GET_STREAM_VOLUME,
     GET_STRATEGY_FOR_STREAM,
@@ -358,6 +359,15 @@ public:
         data.writeInt32(indexMin);
         data.writeInt32(indexMax);
         remote()->transact(INIT_STREAM_VOLUME, data, &reply);
+        return static_cast <status_t> (reply.readInt32());
+    }
+
+    virtual status_t setMuteLedOn(bool on)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(IAudioPolicyService::getInterfaceDescriptor());
+        data.writeInt32(on);
+        remote()->transact(SET_MUTE_LED_ON, data, &reply);
         return static_cast <status_t> (reply.readInt32());
     }
 
@@ -1001,6 +1011,13 @@ status_t BnAudioPolicyService::onTransact(
             reply->writeInt32(static_cast <uint32_t>(initStreamVolume(stream, indexMin,indexMax)));
             return NO_ERROR;
         } break;
+
+        case SET_MUTE_LED_ON: {
+            CHECK_INTERFACE(IAudioPolicyService, data, reply);
+            bool on = static_cast <bool>(data.readInt32());
+            reply->writeInt32(static_cast <int32_t>(setMuteLedOn(on)));
+            return NO_ERROR;
+	} break;
 
         case SET_STREAM_VOLUME: {
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
