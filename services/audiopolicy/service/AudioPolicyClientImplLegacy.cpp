@@ -123,10 +123,19 @@ audio_io_handle_t aps_open_output_on_module(void *service __unused,
                                                    audio_channel_mask_t *pChannelMask,
                                                    uint32_t *pLatencyMs,
                                                    audio_output_flags_t flags,
+#ifndef HAVE_PRE_KITKAT_AUDIO_POLICY_BLOB
                                                    const audio_offload_info_t *offloadInfo)
+#else
+                                                   const audio_offload_info_t *offloadInfo __unused)
+#endif
 {
+#ifdef HAVE_PRE_KITKAT_AUDIO_POLICY_BLOB
+    return open_output(module, pDevices, pSamplingRate, pFormat, pChannelMask,
+                          pLatencyMs, flags, NULL);
+#else
     return open_output(module, pDevices, pSamplingRate, pFormat, pChannelMask,
                           pLatencyMs, flags, offloadInfo);
+#endif
 }
 
 audio_io_handle_t aps_open_dup_output(void *service __unused,
